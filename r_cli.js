@@ -135,7 +135,13 @@ async function runRScript(options) {
   }
   
   // Read the R code from the file
-  const rCode = fs.readFileSync(file, 'utf8');
+  let rCode;
+  try {
+    rCode = fs.readFileSync(file, 'utf8');
+  } catch (error) {
+    console.error(`Error reading file: ${error.message}`);
+    process.exit(1);
+  }
   
   // Run the analysis
   const result = await runAdvancedRAnalysis({
@@ -202,8 +208,12 @@ async function runFromPrompt(options) {
     
     // Save the generated code
     const codeFile = path.join(output, 'generated_code.R');
-    fs.writeFileSync(codeFile, result.code);
-    console.log(`\nGenerated R code saved to: ${codeFile}`);
+    try {
+      fs.writeFileSync(codeFile, result.code);
+      console.log(`\nGenerated R code saved to: ${codeFile}`);
+    } catch (error) {
+      console.error(`Error saving generated code: ${error.message}`);
+    }
   } else {
     console.error('\nFailed to generate or execute R code:', result.error);
     process.exit(1);
@@ -235,7 +245,12 @@ Type 'help' for more commands.
   // Create output directory
   const outputDir = 'interactive_results';
   if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
+    try {
+      fs.mkdirSync(outputDir, { recursive: true });
+    } catch (error) {
+      console.error(`Error creating output directory: ${error.message}`);
+      process.exit(1);
+    }
   }
   
   // Helper for generating code
@@ -268,8 +283,12 @@ Available commands:
       if (!lastCode) {
         console.log('No code to save. Run some code first.');
       } else {
-        fs.writeFileSync(filename, lastCode);
-        console.log(`Saved to ${filename}`);
+        try {
+          fs.writeFileSync(filename, lastCode);
+          console.log(`Saved to ${filename}`);
+        } catch (error) {
+          console.error(`Error saving file: ${error.message}`);
+        }
       }
       return promptUser();
     } else if (input.startsWith('load ')) {
@@ -277,9 +296,13 @@ Available commands:
       if (!fs.existsSync(filename)) {
         console.log(`File not found: ${filename}`);
       } else {
-        const code = fs.readFileSync(filename, 'utf8');
-        console.log(`Loaded ${filename}, executing...`);
-        await executeCode(code);
+        try {
+          const code = fs.readFileSync(filename, 'utf8');
+          console.log(`Loaded ${filename}, executing...`);
+          await executeCode(code);
+        } catch (error) {
+          console.error(`Error reading file: ${error.message}`);
+        }
       }
       return promptUser();
     } else if (input.startsWith('list')) {

@@ -1,4 +1,3 @@
-// R language interpreter with LLM integration
 import { Sandbox } from '@e2b/code-interpreter'
 import fs from 'fs'
 import path from 'path'

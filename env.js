@@ -1,4 +1,3 @@
-// Environment variable loader
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -42,6 +41,12 @@ function loadEnv() {
   
   if (llmProvider === 'anthropic' && !anthropicApiKey) {
     console.warn('Warning: ANTHROPIC_API_KEY is not set but LLM_PROVIDER is set to "anthropic".');
+  }
+  
+  // Ensure at least one LLM API key is set
+  if (!openaiApiKey && !anthropicApiKey) {
+    console.error('Error: At least one LLM API key (OPENAI_API_KEY or ANTHROPIC_API_KEY) must be set.');
+    process.exit(1);
   }
 }
 

@@ -1,5 +1,3 @@
-// File utilities for E2B R sandbox
-// Provides functions to upload and download files to/from the sandbox
 import { Sandbox } from '@e2b/code-interpreter'
 import fs from 'fs'
 import path from 'path'
@@ -76,7 +74,12 @@ async function downloadFile(sandboxPath, localPath, sandbox) {
     // Create directories if needed
     const localDir = path.dirname(localPath);
     if (!fs.existsSync(localDir)) {
-      fs.mkdirSync(localDir, { recursive: true });
+      try {
+        fs.mkdirSync(localDir, { recursive: true });
+      } catch (error) {
+        console.error(`Error creating directory ${localDir}:`, error);
+        return false;
+      }
     }
     
     // Write to local file

@@ -1,5 +1,3 @@
-// Complete data analysis workflow demonstration
-// Shows how to upload files and analyze them with LLM-generated R code
 import { Sandbox } from '@e2b/code-interpreter'
 import { uploadFile, downloadFile } from './file_utils.js'
 import { processRRequest } from './llm_r_interpreter.js'
@@ -102,7 +100,12 @@ async function runDataAnalysisWorkflow(dataFilePath, analysisRequest) {
       // Upload the file to the sandbox
       console.log(`Uploading ${fileName} to the sandbox...`);
       sandboxFilePath = `/home/user/datasets/${fileName}`;
-      await uploadFile(dataFilePath, sandboxFilePath, sandbox);
+      try {
+        await uploadFile(dataFilePath, sandboxFilePath, sandbox);
+      } catch (error) {
+        console.error(`Error uploading file ${dataFilePath}:`, error);
+        throw error;
+      }
     }
     
     console.log(`Dataset uploaded to sandbox: ${sandboxFilePath}`);

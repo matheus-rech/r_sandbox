@@ -1,4 +1,3 @@
-// Interactive R code generation and execution with LLM
 import { processRRequest, runWithCorrection } from './llm_r_interpreter.js';
 import readline from 'readline';
 import fs from 'fs';
