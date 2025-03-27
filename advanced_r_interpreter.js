@@ -1,4 +1,3 @@
-// Advanced R Interpreter with Streaming, Environment Variables, and Enhanced File Handling
 import { Sandbox } from '@e2b/code-interpreter'
 import fs from 'fs'
 import path from 'path'
@@ -9,7 +8,7 @@ import loadEnv from './env.js'
 loadEnv();
 
 // E2B API key
-const E2B_API_KEY = process.env.E2B_API_KEY || "e2b_b1222b4303105f1e3560ecd7029c5845a9a194ff";
+const E2B_API_KEY = process.env.E2B_API_KEY;
 
 /**
  * Executes R code with streaming output
